@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      DataStruct
   other-modules:
       Paths_mypandoc
   autogen-modules:
