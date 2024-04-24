@@ -4,7 +4,7 @@ pipeline {
         // Set the ssh key for the mirror using secret private key
         PRIVATE_KEY = credentials('EPITECH_SSH_KEY')
         PUBLIC_KEY = credentials('EPITECH_SSH_PUBKEY')
-        MIRROR_URL = 'https://github.com/EpitechPromo2027/B-FUN-400-NAN-4-1-mypandoc-simon.ganier-lombard.git'
+        MIRROR_URL = 'git@github.com:EpitechPromo2027/B-FUN-400-NAN-4-1-mypandoc-simon.ganier-lombard.git'
         BIN_NAME = 'mypandoc'
     }
     stages {
