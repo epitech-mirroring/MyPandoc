@@ -13,11 +13,9 @@ author:         Axel ECKENBERG, Simon GAGNIER, Marius PAIN, Landry GIGANT
 maintainer:     axel.eckenberg@epitech.eu
 copyright:      2024 Epitech
 license:        BSD-3-Clause
-license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    CHANGELOG.md
 
 source-repository head
   type: git
@@ -26,6 +24,7 @@ source-repository head
 library
   exposed-modules:
       DataStruct
+      ParserData
   other-modules:
       Paths_mypandoc
   autogen-modules:
