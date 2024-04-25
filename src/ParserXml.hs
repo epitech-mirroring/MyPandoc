@@ -6,7 +6,7 @@
 -}
 
 module ParserXml (
-        parseDocument
+        parseXmlDocument
     ) where
       
 import ParserData
@@ -168,8 +168,8 @@ parseBody = do
     
 ------------
 
-parseDocument :: Parser Document
-parseDocument = do
+parseXmlDocument :: Parser Document
+parseXmlDocument = do
     parseFlag "document"
     parseWhiteSpace
     header <- parseHeader
