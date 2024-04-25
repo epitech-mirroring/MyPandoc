@@ -6,7 +6,7 @@
 -}
 
 module ParserXml (
-        parseHeader
+        parseDocument
     ) where
       
 import ParserData
