@@ -6,9 +6,9 @@
 -}
 
 module ParserXml (
-        parseXmlDocument
+        getXmlDocument
     ) where
-      
+
 import ParserData
 import DataStruct
 import Control.Applicative (Alternative(..))
@@ -147,7 +147,7 @@ parseSection = do
     elems <- parseMany parseElement
     parseFlag "/section"
     return (Section (SectionType title elems))
-    
+
 ---
 
 parseElement :: Parser Element
@@ -165,7 +165,7 @@ parseBody = do
     elems <- parseMany parseElement
     parseFlag "/body"
     return (Body elems)
-    
+
 ------------
 
 parseXmlDocument :: Parser Document
@@ -178,3 +178,8 @@ parseXmlDocument = do
     parseWhiteSpace
     parseFlag "/document"
     return (Document header body)
+
+getXmlDocument :: String -> Maybe Document
+getXmlDocument s = case runParser parseXmlDocument s of
+    Just (doc, "") -> Just doc
+    _ -> Nothing
