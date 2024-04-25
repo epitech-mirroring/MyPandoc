@@ -1,6 +1,6 @@
 ##
 ## EPITECH PROJECT, 2024
-## MicroTekSpice
+## MyPandoc
 ## File description:
 ## Makefile
 ##
