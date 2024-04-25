@@ -31,8 +31,10 @@ SKIPPED = [$(MAGENTA)@$(RESET)]
 all:
 	@printf "$(RUNNING)$(BLUE) 🚧  Building mypandoc$(RESET)\n";
 	@stack build 2> /tmp/mypandocbuild.log \
-	&& printf "$(SUCCESS)$(GREEN) 🚀  Build successfully mypandoc$(RESET)\n" \
-	|| (printf "$(FAILURE)$(RED) 🚨  Build failed! $(RESET)\n" && cat /tmp/mypandocbuild.log && false);
+	&& printf \
+	"$(SUCCESS)$(GREEN) 🚀  Build successfully mypandoc$(RESET)\n" \
+	|| (printf "$(FAILURE)$(RED) 🚨  Build failed!\
+	$(RESET)\n" && cat /tmp/mypandocbuild.log && false);
 	@printf "$(RUNNING)$(BLUE) 📦  Moving built binary (${NAME})$(RESET)\n";
 	@cp $(STACK_BIN) $(NAME)
 	@printf "$(SUCCESS)$(GREEN) 📦  Moved binary successfully$(RESET)\n";
