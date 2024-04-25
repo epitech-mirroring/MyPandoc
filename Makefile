@@ -33,10 +33,13 @@ all:
 	"$(SUCCESS)$(GREEN) 🚀  Build successfully mypandoc$(RESET)\n" \
 	|| (printf "$(FAILURE)$(RED) 🚨  Build failed!\
 	$(RESET)\n" && cat /tmp/mypandocbuild.log && false);
-	@printf "$(RUNNING)$(BLUE) 📦  Moving built binary (${NAME})$(RESET)    \r";
+	@printf \
+	"$(RUNNING)$(BLUE) 📦  Moving built binary (${NAME})$(RESET)    \r";
 	@cp $(STACK_BIN) $(NAME) &&  \
-	printf "$(SUCCESS)$(GREEN) 📦  Moved binary successfully$(RESET)       \n" || \
-	printf "$(FAILURE)$(RED) 🚨  Failed to move binary$(RESET)            \n";
+	printf \
+	"$(SUCCESS)$(GREEN) 📦  Moved binary successfully$(RESET)       \n" || \
+	printf \
+	"$(FAILURE)$(RED) 🚨  \Failed to move binary$(RESET)            \n";
 
 clean:
 	@stack clean
