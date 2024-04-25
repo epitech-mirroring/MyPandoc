@@ -24,6 +24,7 @@ source-repository head
 library
   exposed-modules:
       DataStruct
+      HandleArgs
       ParserData
   other-modules:
       Paths_mypandoc
