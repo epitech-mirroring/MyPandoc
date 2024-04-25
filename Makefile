@@ -8,8 +8,6 @@
 ## Config
 NAME 			= 	mypandoc
 
-STACK_WORK		= 	.stack-work/*
-STACK_BUILD		= 	.stack-work/dist/*
 STACK_PATH		= 	$(shell stack path --local-install-root)
 STACK_BIN		= 	$(STACK_PATH)/bin/${NAME}-exe
 
@@ -29,15 +27,16 @@ SKIPPED = [$(MAGENTA)@$(RESET)]
 
 ## Rules
 all:
-	@printf "$(RUNNING)$(BLUE) 🚧  Building mypandoc$(RESET)\n";
+	@printf "$(RUNNING)$(BLUE) 🚧  Building mypandoc$(RESET)\r";
 	@stack build 2> /tmp/mypandocbuild.log \
 	&& printf \
 	"$(SUCCESS)$(GREEN) 🚀  Build successfully mypandoc$(RESET)\n" \
 	|| (printf "$(FAILURE)$(RED) 🚨  Build failed!\
 	$(RESET)\n" && cat /tmp/mypandocbuild.log && false);
-	@printf "$(RUNNING)$(BLUE) 📦  Moving built binary (${NAME})$(RESET)\n";
-	@cp $(STACK_BIN) $(NAME)
-	@printf "$(SUCCESS)$(GREEN) 📦  Moved binary successfully$(RESET)\n";
+	@printf "$(RUNNING)$(BLUE) 📦  Moving built binary (${NAME})$(RESET)    \r";
+	@cp $(STACK_BIN) $(NAME) &&  \
+	printf "$(SUCCESS)$(GREEN) 📦  Moved binary successfully$(RESET)       \n" || \
+	printf "$(FAILURE)$(RED) 🚨  Failed to move binary$(RESET)            \n";
 
 clean:
 	@stack clean
