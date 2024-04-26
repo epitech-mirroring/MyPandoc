@@ -6,14 +6,11 @@
 -}
 
 module WriterXml (
-        writeXmlDocument
+        documentToXml
     ) where
       
 import DataStruct
 import Prelude
-
-writeXmlDocument :: FilePath -> Document -> IO ()
-writeXmlDocument path doc = writeFile path (documentToXml doc)
 
 printIndented :: Int -> String
 printIndented n = "\n" ++ concat (replicate n "\t")
