@@ -5,7 +5,7 @@
 -- ParserXml
 -}
 
-module ParserXml (
+module Xml.ParserXml (
         getXmlDocument
     ) where
 

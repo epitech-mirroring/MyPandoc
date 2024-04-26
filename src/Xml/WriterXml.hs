@@ -5,10 +5,10 @@
 -- WriterXml
 -}
 
-module WriterXml (
+module Xml.WriterXml (
         documentToXml
     ) where
-      
+
 import DataStruct
 import Prelude
 
