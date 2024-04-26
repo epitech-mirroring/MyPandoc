@@ -53,24 +53,22 @@ listContentWriter [] _ = ""
 contentWriter :: Element -> Int -> String
 contentWriter x indent = case x of
     Text text -> replicate (indent * 4) ' ' ++ "\"" ++ text ++ "\""
-    Bold element -> replicate (indent * 4) ' '
-        ++ formattedTextWriter element indent
-    Italic element -> replicate (indent * 4) ' '
-        ++ formattedTextWriter element indent
-    Code element -> replicate (indent * 4) ' '
-        ++ formattedTextWriter element indent
     List _ -> replicate (indent * 4) ' ' ++ listWriter x indent
     CodeBlock _ -> replicate (indent * 4) ' ' ++ listWriter x indent
-    Paragraph elements -> replicate (indent * 4) ' '
-        ++ "[\n" ++ listContentWriter elements indent
-        ++ replicate (indent * 4) ' ' ++ "]"
+    Paragraph elements -> paragraphWriter elements indent
     Link element -> replicate (indent * 4) ' ' ++ linksWriter element indent
     Image element -> replicate (indent * 4) ' ' ++ imagesWriter element indent
-    Section section -> replicate (indent * 4) ' '
-        ++ sectionWriter section indent
+    Section sec -> replicate (indent * 4) ' ' ++ sectionWriter sec indent
+    _ -> formattedTextWriter x indent
+
+paragraphWriter :: [Element] -> Int -> String
+paragraphWriter elements indent = replicate (indent * 4) ' '
+    ++ "[\n" ++ listContentWriter elements indent
+    ++ replicate (indent * 4) ' ' ++ "]"
 
 formattedTextWriter :: Element -> Int -> String
-formattedTextWriter element indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
+formattedTextWriter element indent = replicate (indent * 4) ' ' ++
+    "{\n" ++ replicate ((indent + 1) * 4) ' '
     ++ "\"" ++ (case element of
         Bold _ -> "bold"
         Italic _ -> "italic"
