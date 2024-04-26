@@ -8,6 +8,7 @@
 module DataStruct (
         Document(..),
         Header(..),
+        HeaderElement(..),
         Body(..),
         Element(..),
         LinkType(..),
@@ -21,10 +22,10 @@ data Document = Document {
     }
 
 data Header = Header {
-    title :: String,
-    author :: Maybe String,
-    date :: Maybe String
+    contents :: [HeaderElement]
     }
+
+data HeaderElement = Title String | Author String | Date String
 
 data Body = Body {
     content :: [Element]
