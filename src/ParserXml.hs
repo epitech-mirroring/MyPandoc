@@ -87,6 +87,7 @@ parseText = do
 
 parseBold :: Parser Element
 parseBold = do
+    parseWhiteSpace
     parseFlag "bold"
     elem <- parseElement
     parseFlag "/bold"
@@ -94,6 +95,7 @@ parseBold = do
 
 parseItalic :: Parser Element
 parseItalic = do
+    parseWhiteSpace
     parseFlag "italic"
     elem <- parseElement
     parseFlag "/italic"
@@ -101,6 +103,7 @@ parseItalic = do
 
 parseCode :: Parser Element
 parseCode = do
+    parseWhiteSpace
     parseFlag "code"
     elem <- parseElement
     parseFlag "/code"
@@ -108,13 +111,15 @@ parseCode = do
 
 parseList :: Parser Element
 parseList = do
+    parseWhiteSpace
     parseFlag "list"
     elems <- parseMany parseElement
     parseFlag "/list"
-    return (List elems)
+    return (List (filterWhiteSpace elems))
 
 parseParagraph :: Parser Element
 parseParagraph = do
+    parseWhiteSpace
     parseFlag "paragraph"
     elems <- parseMany parseElement
     parseFlag "/paragraph"
@@ -122,13 +127,15 @@ parseParagraph = do
 
 parseCodeBlock :: Parser Element
 parseCodeBlock = do
+    parseWhiteSpace
     parseFlag "codeblock"
     elems <- parseMany parseElement
     parseFlag "/codeblock"
-    return (CodeBlock elems)
+    return (CodeBlock (filterWhiteSpace elems))
 
 parseLink :: Parser Element
 parseLink = do
+    parseWhiteSpace
     (_, url) <- parseFlagWithAttr "link" "url"
     elems <- parseMany parseElement
     parseFlag "/link"
@@ -136,6 +143,7 @@ parseLink = do
 
 parseImage :: Parser Element
 parseImage = do
+    parseWhiteSpace
     (_, url) <- parseFlagWithAttr "image" "url"
     alt <- parseMany parseElement
     parseFlag "/image"
@@ -143,20 +151,31 @@ parseImage = do
 
 parseSection :: Parser Element
 parseSection = do
+    parseWhiteSpace
     (_, title) <- parseFlagWithAttr "section" "title"
     elems <- parseMany parseElement
     parseFlag "/section"
-    return (Section (SectionType title elems))
+    return (Section (SectionType title (filterWhiteSpace elems)))
+
+--
+
+isWhiteSpace :: Element -> Bool
+isWhiteSpace (Text str) = all (`elem` " \n\t") str
+isWhiteSpace _ = False
+
+filterWhiteSpace ::[Element] -> [Element]
+filterWhiteSpace [] = []
+filterWhiteSpace (elem:xs)
+    | isWhiteSpace elem = filterWhiteSpace xs
+    | otherwise = elem : filterWhiteSpace xs
 
 ---
 
 parseElement :: Parser Element
 parseElement = do
-    parseWhiteSpace
     elem <- parseBold <|> parseItalic <|> parseCode <|> parseList <|>
         parseParagraph <|> parseCodeBlock <|> parseLink <|> parseImage <|>
         parseSection <|> parseText
-    parseWhiteSpace
     return elem
 
 parseBody :: Parser Body
