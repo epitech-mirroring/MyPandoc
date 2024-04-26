@@ -49,22 +49,22 @@ parseHeaderAuthorAndDate title "author" = do
     author <- parseMany (parseNotChar '<')
     parseAnd (parseFlag "/author") parseWhiteSpace
     arg <- parseFlag "date" <|> parseFlag "/header"
-    (if arg == "/header" then return (Header title (Just author) Nothing)
+    (if arg == "/header" then return (Header [Title title, Author author])
     else do
         parseWhiteSpace
         date <- parseMany (parseNotChar '<')
         parseFlag "/date" *> parseWhiteSpace *> parseFlag "/header"
-        return (Header title (Just author) (Just date)))
+        return (Header [Title title, Author author, Date date]))
 parseHeaderAuthorAndDate title "date" = do
     date <- parseMany (parseNotChar '<')
     parseAnd (parseFlag "/date") parseWhiteSpace
     arg <- parseFlag "/header" <|> parseFlag "author"
-    (if arg == "/header" then return (Header title Nothing (Just date))
+    (if arg == "/header" then return (Header [Title title, Date date])
     else do
         parseWhiteSpace
         author <- parseMany (parseNotChar '<')
         parseFlag "/author" *> parseWhiteSpace *> parseFlag "/header"
-        return (Header title (Just author) (Just date)))
+        return (Header [Title title, Author author, Date date]))
 
 parseHeader :: Parser Header
 parseHeader = do
@@ -73,7 +73,7 @@ parseHeader = do
     parseWhiteSpace
     arg <- parseFlag "/header" <|> parseFlag "author" <|> parseFlag "date"
     if arg == "/header" then
-        return (Header title Nothing Nothing)
+        return (Header [Title title])
     else
       parseWhiteSpace >>
       parseHeaderAuthorAndDate title arg
@@ -183,3 +183,4 @@ getXmlDocument :: String -> Maybe Document
 getXmlDocument s = case runParser parseXmlDocument s of
     Just (doc, "") -> Just doc
     _ -> Nothing
+    
