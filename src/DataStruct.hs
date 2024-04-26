@@ -13,23 +13,24 @@ module DataStruct (
         Element(..),
         LinkType(..),
         ImageType(..),
-        SectionType(..)
+        SectionType(..),
     ) where
 
 data Document = Document {
     header :: Header,
     body :: Body
-    }
+    } deriving (Show)
 
 data Header = Header {
     contents :: [HeaderElement]
-    }
+    } deriving (Show)
 
 data HeaderElement = Title String | Author String | Date String
+    deriving (Show)
 
 data Body = Body {
     content :: [Element]
-    }
+    } deriving (Show)
 
 data Element = Text String
     | Bold Element
@@ -41,18 +42,20 @@ data Element = Text String
     | Link LinkType
     | Image ImageType
     | Section SectionType
+    | Empty
+    deriving (Show, Eq)
 
 data LinkType = LinkType {
     linkUrl :: String,
     linkContent :: [Element]
-    }
+    } deriving (Show, Eq)
 
 data ImageType = ImageType {
     imgUrl :: String,
-    alt :: [Element]
-    }
+    imgAlt :: [Element]
+    } deriving (Show, Eq)
 
 data SectionType = SectionType {
     sectionTitle :: String,
     sectionContent :: [Element]
-    }
+    } deriving (Show, Eq)
