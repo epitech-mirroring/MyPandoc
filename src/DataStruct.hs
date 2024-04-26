@@ -49,7 +49,7 @@ data LinkType = LinkType {
 
 data ImageType = ImageType {
     imgUrl :: String,
-    alt :: [Element]
+    imgAlt :: [Element]
     }
 
 data SectionType = SectionType {
