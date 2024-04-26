@@ -9,6 +9,7 @@ module HandleArgs (
         Options(..),
         defaultOptions,
         options,
+        App(..),
         getHelp,
         checkArgs,
         parseOptions,
@@ -28,6 +29,11 @@ data Options = Options {
         oInput :: Maybe String
     } deriving (Show, Eq)
 
+data App = App {
+    opt :: Options,
+    content :: String
+}
+
 defaultOptions :: Options
 defaultOptions = Options {
     oIformat = Nothing,
@@ -35,12 +41,6 @@ defaultOptions = Options {
     oOutput = Nothing,
     oInput = Nothing
 }
-
-getFormat :: String -> String
-getFormat _ = "JSON"
-
-getOutput :: String -> String
-getOutput _ = "test"
 
 {-
 input path (Mandatory) to read the data from the right file (ifile)
@@ -61,12 +61,23 @@ options = [
     ]
 
 getHelp :: String
-getHelp = usageInfo "USAGE: ./mypandoc -i ifile -f oformat [-o ofile] [-e iformat]" options
+getHelp =
+    usageInfo "USAGE: ./mypandoc\
+    \-i ifile -f oformat [-o ofile] [-e iformat]" options
 
 checkArgs :: Options -> Maybe Options
-checkArgs Options { oOformat = Nothing, oInput = Nothing } = Nothing
-checkArgs opts = Just (opts { oOutput = if isJust (oOutput opts) then oOutput opts else Just (getOutput "")
-                            , oIformat = if isJust (oIformat opts) then oIformat opts else Just (getFormat "") })
+checkArgs Options {oOformat = Nothing} = Nothing
+checkArgs Options {oInput = Nothing} = Nothing
+checkArgs opts = Just (opts{
+    oOutput = if isJust (oOutput opts) then oOutput opts
+        else Nothing,
+    oIformat = if isJust (oIformat opts) then oIformat opts
+        else Nothing,
+    oOformat = if isJust (oOformat opts) then oOformat opts
+        else Nothing,
+    oInput = if isJust (oInput opts) then oInput opts
+        else Nothing
+})
 
 parseOptions :: [String] -> IO Options
 parseOptions args = case getOpt Permute options args of
@@ -75,13 +86,11 @@ parseOptions args = case getOpt Permute options args of
         hPutStrLn stderr getHelp >>
         exitWith (ExitFailure 84)
 
-parseArgs :: IO Options
+parseArgs :: IO App
 parseArgs = do
     args <- getArgs
     opts <- parseOptions args
     case checkArgs opts of
-        Just finalOpts -> return finalOpts
-        Nothing -> do
-            hPutStrLn stderr "Mandatory values are missing. Please provide input format and input file."
-            hPutStrLn stderr getHelp
+        Just finalOpts -> return App { opt = finalOpts, content = "" }
+        Nothing -> hPutStrLn stderr getHelp >>
             exitWith (ExitFailure 84)
