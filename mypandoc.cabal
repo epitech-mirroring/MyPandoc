@@ -32,6 +32,7 @@ library
       XML.ParserXMLElements
       XML.ParserXMLHeader
       XML.ParserXMLUtils
+      XML.WriterXML
   other-modules:
       Paths_mypandoc
   autogen-modules:
