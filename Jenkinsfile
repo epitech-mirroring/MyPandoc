@@ -100,9 +100,6 @@ pipeline {
                     // Run the tests
                     sh 'make tests_run'
 
-                    // Transform the tests results to JUnit format
-                    sh 'stack exec hpc-codecov -- testsuite --junit'
-
                     // Display the tests results in a graph using the JUnit plugin
                     junit(testResults: 'junit.xml', allowEmptyResults : true)
 
