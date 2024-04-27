@@ -50,14 +50,14 @@ input format (optional) if not launch detection of the format
 -}
 options :: [OptDescr (Options -> Options)]
 options = [
-    Option ['i'] ["ifile"] (ReqArg (\i opts -> opts {oInput = Just i}) "ifile")
-        "path to the file to convert",
-    Option ['o'] ["ofile"] (ReqArg (\o opts -> opts {oOutput = Just o}) "ofile")
-        "path to the output file",
+    Option ['i'] ["ifile"] (ReqArg (\i opts -> opts {oInput = Just i})
+        "ifile") "path to the file to convert",
+    Option ['o'] ["ofile"] (ReqArg (\o opts -> opts {oOutput = Just o})
+        "ofile") "path to the output file",
     Option ['f'] ["oformat"] (ReqArg (\f opts -> opts {oOformat =
         checkFormat f}) "oformat") "output format (xml, json, markdown)",
-    Option ['e'] ["iformat"] (ReqArg (\e opts -> opts {oIformat = Just e}) "iformat")
-        "input format (xml, json, markdown)"
+    Option ['e'] ["iformat"] (ReqArg (\e opts -> opts {oIformat = Just e})
+        "iformat") "input format (xml, json, markdown)"
     ]
 
 getHelp :: String
