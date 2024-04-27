@@ -39,6 +39,7 @@ parseXMLDocument = do
     bodyContent <- parseXMLBody
     _ <- parseWhiteSpace
     _ <- parseXMLFlag "/document"
+    parseWhiteSpace
     return (Document headerContent bodyContent)
 
 getXMLDocument :: String -> Maybe Document
