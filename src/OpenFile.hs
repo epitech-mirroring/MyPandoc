@@ -15,45 +15,44 @@ import HandleArgs (
         App(..),
         parseArgs,
     )
-import Data.Maybe
-import GHC.IO.Exception
-import System.Exit
-import Control.Exception
+
+import System.Exit (exitWith, ExitCode(..))
+import Control.Exception (catch)
 import Error (handleError)
 
 openFile :: IO App
 openFile = do
-    let args = parseArgs
-    app <- args
-    let options = opt app
-    let input = fromMaybe "" (oInput options)
-    if input == ""
-        then hPutStrLn stderr "Error: no input file" >> putStrLn input >>
+    App options _ <- parseArgs
+    case oInput options of
+        Nothing -> hPutStrLn stderr "Error: no input file" >>
             exitWith (ExitFailure 84)
-        else do
+        Just input -> do
             file <- readFile input
             return App { opt = options, content = file }
         `catch` (\e -> handleError e "Error: failed to read input file" >>
-            return App { opt = options, content = "" })
+            exitWith (ExitFailure 84))
 
-getFormat :: String -> String
-getFormat input
-    | (x:_) <- input, x == '<' = "XML"
-    | (x:_) <- input, x == '{' = "JSON"
-    | (x:_) <- input, x == '-' = "MD"
-    | otherwise = "unknown"
+wichFormat :: String -> String
+wichFormat ('<' : _) = "xml"
+wichFormat ('{' : _) = "json"
+wichFormat ('-' : _) = "markdown"
+wichFormat _ = "unknown"
 
-getOutput :: String -> String
-getOutput out = if out == "" then "stdout" else out
+getFormat :: Maybe String -> String -> String
+getFormat Nothing fileContent = wichFormat fileContent
+getFormat (Just format) _ = format
+
+getOutput :: Maybe String -> String
+getOutput Nothing = "stdout"
+getOutput (Just output) = output
 
 getOption :: IO App
 getOption = do
-    let app = openFile
-    app' <- app
-    let options = opt app'
-    let format = getFormat (content app')
-    let output = getOutput (fromMaybe "" (oOutput options))
+    App options fileContent <- openFile
     return App {
-        opt = options { oIformat = Just format, oOutput = Just output},
-        content = content app'
+        opt = options {
+            oIformat = Just (getFormat (oIformat options) fileContent),
+            oOutput = Just (getOutput (oOutput options))
+            },
+        content = fileContent
     }
