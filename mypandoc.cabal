@@ -25,12 +25,14 @@ library
   exposed-modules:
       Core
       DataStruct
+      Error
       HandleArgs
-      OpenFile
       JSON.ParserJSON
       JSON.ParserJSONElements
       JSON.ParserJSONHeader
       JSON.WriterJSON
+      Markdown.WriterMarkdown
+      OpenFile
       ParserData
       XML.ParserXML
       XML.ParserXMLElements
