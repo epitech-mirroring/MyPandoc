@@ -27,7 +27,15 @@ library
       DataStruct
       HandleArgs
       OpenFile
+      JSON.ParserJSON
+      JSON.ParserJSONElements
+      JSON.ParserJSONHeader
       ParserData
+      XML.ParserXML
+      XML.ParserXMLElements
+      XML.ParserXMLHeader
+      XML.ParserXMLUtils
+      XML.WriterXML
   other-modules:
       Paths_mypandoc
   autogen-modules:
