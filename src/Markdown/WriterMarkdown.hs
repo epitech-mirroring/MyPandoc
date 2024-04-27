@@ -77,7 +77,7 @@ elementToMarkdown (Image img) = "!" ++ "[" ++
 elementToMarkdown (Section section) =
     sectionTitleToMarkdown (sectionTitle section) ++
     elementsToMarkdown (sectionContent section)
-elementsToMarkdown Empty = ""
+elementToMarkdown Empty = ""
 
 listToMarkdown :: [Element] -> String
 listToMarkdown [] = ""
