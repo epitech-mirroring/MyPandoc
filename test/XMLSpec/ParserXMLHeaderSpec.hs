@@ -37,6 +37,8 @@ parseXMLHeaderAuthorAndDateSpec = describe "parseXMLHeaderAuthorAndDate" $ do
         runParser (parseXMLHeaderAuthorAndDate "title" "date") "date</date><author>author</author></header>" `shouldBe` Just (Header [Title "title", Author "author", Date "date"], "")
     it "should not parse a header" $ do
         runParser (parseXMLHeaderAuthorAndDate "title" "author") "a<author>ab</header>" `shouldBe` Nothing
+    it "should be an error" $ do
+        runParser (parseXMLHeaderAuthorAndDate "title" "error") "author</author" `shouldBe` Nothing
 
 parseXMLHeaderSpec :: Spec
 parseXMLHeaderSpec = describe "parseXMLHeader" $ do
