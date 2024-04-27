@@ -12,6 +12,7 @@ module HandleArgs (
         App(..),
         getHelp,
         checkArgs,
+        checkFormat,
         parseOptions,
         parseArgs
     ) where

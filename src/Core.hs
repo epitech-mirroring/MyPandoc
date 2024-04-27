@@ -6,7 +6,10 @@
 -}
 
 module Core (
-    writeTheDoc
+    writeTheDoc,
+    createDoc,
+    getParserContent,
+    writeDocString,
 ) where
 
 import HandleArgs (Options(..), App(..))

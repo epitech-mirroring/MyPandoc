@@ -6,7 +6,11 @@
 -}
 
 module OpenFile (
-        getOption
+        getOption,
+        wichFormat,
+        openFile,
+        getFormat,
+        getOutput
     ) where
 
 import System.IO (hPutStrLn, stderr)
