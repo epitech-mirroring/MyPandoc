@@ -53,7 +53,7 @@ options = [
         "path to the file to convert",
     Option ['o'] [""] (ReqArg (\o opts -> opts {oOutput = Just o}) "ofile")
         "path to the output file",
-    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat = Just f}) "oformat")
+    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat = checkFormat f}) "oformat")
         "output format (xml, json, markdown)",
     Option ['e'] [""] (ReqArg (\e opts -> opts {oIformat = Just e}) "iformat")
         "input format (xml, json, markdown)"
@@ -72,7 +72,11 @@ checkFormat format = if format `elem` ["xml", "json", "markdown"]
 checkArgs :: Options -> Maybe Options
 checkArgs Options {oOformat = Nothing} =  Nothing
 checkArgs Options {oInput = Nothing} =  Nothing
-checkArgs opts = Just opts
+checkArgs Options opts {oIformat = Nothing} = Just opts
+checkArgs Options opts {oIformat = Just iformat} =
+    if checkFormat iformat == Nothing
+    then Nothing
+    else Just opts
 
 parseOptions :: [String] -> IO Options
 parseOptions args = case getOpt Permute options args of
