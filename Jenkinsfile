@@ -34,7 +34,7 @@ pipeline {
                         def line = error.split(':')[1]
                         def type = error.split(':')[2]
                         def code = error.split(':')[3]
-                        echo "File: ${file}, Line: ${line}, Type: ${type}, Code: ${code}"
+                        unstable "File: ${file}, Line: ${line}, Type: ${type}, Code: ${code}"
                     }
                     // Archive the report
                     archiveArtifacts 'coding-style-reports.log'
@@ -59,7 +59,7 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack -v /var/lib/jenkins/.local:/.local'
                 }
             }
             steps {
@@ -86,13 +86,13 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack -v /var/lib/jenkins/.local:/.local'
                 }
             }
             steps {
                 ansiColor('xterm') {
                     // Fix the permissions
-                    sh 'TAR_OPTIONS=--no-same-owner stack setup --allow-different-user'
+                    sh 'TAR_OPTIONS=--no-same-owner stack setup'
 
                     // Run the tests
                     sh 'make tests_run'
