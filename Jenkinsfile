@@ -104,9 +104,9 @@ pipeline {
                     sh '/.local/bin/hpc-codecov stack:all -f cobertura -o cobertura.xml'
 
                     // Display coverage using the Coverage plugin
-                    recordCoverage(tools: [[parser: 'COBERTURA']],
+                    /*recordCoverage(tools: [[parser: 'COBERTURA']],
                             id: 'cobertura', name: 'Coverage',
-                            sourceCodeRetention: 'EVERY_BUILD')
+                            sourceCodeRetention: 'EVERY_BUILD')*/
                 }
             }
         }
