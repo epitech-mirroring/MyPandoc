@@ -56,13 +56,12 @@ pipeline {
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
-            when {
-                expression {
-                    return false
-                }
-            }
             steps {
                 ansiColor('xterm') {
+                    // Fix the permissions
+                    sh 'chown -R $(id -un):$(id -gn) ~'
+                    sh 'chown -R $(id -un):$(id -gn) .'
+
                     // Run the build
                     sh 'make'
 
@@ -79,13 +78,18 @@ pipeline {
             }
         }
         stage ('🧪 Tests') {
-            when {
-                expression {
-                    return false
+            agent {
+                docker {
+                    image 'epitechcontent/epitest-docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
                 ansiColor('xterm') {
+                    // Fix the permissions
+                    sh 'chown -R $(id -un):$(id -gn) ~'
+                    sh 'chown -R $(id -un):$(id -gn) .'
+
                     // Run the tests
                     sh 'make tests_run'
 
