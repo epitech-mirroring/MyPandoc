@@ -19,7 +19,8 @@ createDoc filecont output = if output /= "stdout"
     else putStrLn filecont
 
 {-//TODO
-    get the string to convert
+    - Add the function to send the content of the file to paser
+    - Add the function to get the parsed content from writter
 -}
 
 writeTheDoc :: IO ()
