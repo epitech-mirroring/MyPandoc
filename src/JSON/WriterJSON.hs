@@ -55,7 +55,7 @@ headerContentToJSON [] = ""
 
 bodyToJSON :: Body -> String
 bodyToJSON b = replicate 4 ' ' ++ "\"body\": [\n" ++
-    listContentToJSON (content b) 1 ++ "\n" ++ replicate 4 ' ' ++ "]"
+    listContentToJSON (content b) 1 ++ replicate 4 ' ' ++ "]"
 
 listContentToJSON :: [Element] -> Int -> String
 listContentToJSON [x] indent = contentToJSON x (indent + 1) ++ "\n"
@@ -64,27 +64,37 @@ listContentToJSON (x:xs) indent = contentToJSON x (indent + 1) ++
 listContentToJSON [] _ = ""
 
 contentToJSON :: Element -> Int -> String
-contentToJSON (Text text) indent = replicate (indent * 4) ' ' ++ "\"" ++ text ++ "\""
-contentToJSON (List elements) indent = replicate (indent * 4) ' ' ++ listToJSON (List elements) indent
-contentToJSON (CodeBlock elements) indent = replicate (indent * 4) ' ' ++ listToJSON (CodeBlock elements) indent
-contentToJSON (Paragraph elements) indent = replicate (indent * 4) ' ' ++ paragraphToJSON elements indent
-contentToJSON (Link element) indent = replicate (indent * 4) ' ' ++ linksToJSON element indent
-contentToJSON (Image element) indent = replicate (indent * 4) ' ' ++ imagesToJSON element indent
-contentToJSON (Section sec) indent = replicate (indent * 4) ' ' ++ sectionToJSON sec indent
+contentToJSON (Text text) indent =
+    replicate (indent * 4) ' ' ++ "\"" ++ text ++ "\""
+contentToJSON (List elements) indent =
+    replicate (indent * 4) ' ' ++ listToJSON (List elements) indent
+contentToJSON (CodeBlock elements) indent =
+    replicate (indent * 4) ' ' ++ listToJSON (CodeBlock elements) indent
+contentToJSON (Paragraph elements) indent =
+    replicate (indent * 4) ' ' ++ paragraphToJSON elements indent
+contentToJSON (Link element) indent =
+    replicate (indent * 4) ' ' ++ linksToJSON element indent
+contentToJSON (Image element) indent =
+    replicate (indent * 4) ' ' ++ imagesToJSON element indent
+contentToJSON (Section sec) indent =
+    replicate (indent * 4) ' ' ++ sectionToJSON sec indent
+contentToJSON (Bold element) indent =
+    formattedTextToJSON (Bold element) indent
+contentToJSON (Italic element) indent =
+    formattedTextToJSON (Italic element) indent
+contentToJSON (Code element) indent =
+    formattedTextToJSON (Code element) indent
 contentToJSON Empty indent = ""
-contentToJSON (Bold element) indent = formattedTextToJSON (Bold element) indent
-contentToJSON (Italic element) indent = formattedTextToJSON (Italic element) indent
-contentToJSON (Code element) indent = formattedTextToJSON (Code element) indent
--- contentToJSON x indent = case x of
---     Text text -> replicate (indent * 4) ' ' ++ "\"" ++ text ++ "\""
---     List _ -> replicate (indent * 4) ' ' ++ listToJSON x indent
---     CodeBlock _ -> replicate (indent * 4) ' ' ++ listToJSON x indent
---     Paragraph elements -> paragraphToJSON elements indent
---     Link element -> replicate (indent * 4) ' ' ++ linksToJSON element indent
---     Image element -> replicate (indent * 4) ' ' ++ imagesToJSON element indent
---     Section sec -> replicate (indent * 4) ' ' ++ sectionToJSON sec indent
---     Empty -> ""
---     _ -> formattedTextToJSON x indent
+--contentToJSON x indent = case x of
+--   Text text -> replicate (indent * 4) ' ' ++ "\"" ++ text ++ "\""
+--   List _ -> replicate (indent * 4) ' ' ++ listToJSON x indent
+--   CodeBlock _ -> replicate (indent * 4) ' ' ++ listToJSON x indent
+--   Paragraph elements -> paragraphToJSON elements indent
+--   Link element -> replicate (indent * 4) ' ' ++ linksToJSON element indent
+--   Image element -> replicate (indent * 4) ' ' ++ imagesToJSON element indent
+--   Section sec -> replicate (indent * 4) ' ' ++ sectionToJSON sec indent
+--   Empty -> ""
+--   _ -> formattedTextToJSON x indent
 
 paragraphToJSON :: [Element] -> Int -> String
 paragraphToJSON elements indent = replicate (indent * 4) ' '
