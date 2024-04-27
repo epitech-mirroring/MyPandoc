@@ -101,7 +101,7 @@ pipeline {
                     junit(testResults: 'junit.xml', allowEmptyResults : true)
 
                     // Run the coverage
-                    sh '/.local/bin/hpc-codecov stack:all -f cobertura -o coverage.xml'
+                    sh '/.local/bin/hpc-codecov stack:all -f cobertura -o cobertura.xml'
 
                     // Display coverage using the Coverage plugin
                     recordCoverage(tools: [[parser: 'COBERTURA']],
