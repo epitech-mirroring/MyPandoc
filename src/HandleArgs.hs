@@ -16,7 +16,7 @@ module HandleArgs (
         parseArgs
     ) where
 
-import System.Console.GetOpt
+import System.Console.GetOpt (OptDescr(..), ArgDescr(..), ArgOrder(..), getOpt, usageInfo)
 import System.Environment (getArgs)
 import System.Exit (exitWith, ExitCode(..))
 import System.IO (hPutStrLn, stderr)
@@ -72,9 +72,8 @@ checkFormat format = if format `elem` ["xml", "json", "markdown"]
 checkArgs :: Options -> Maybe Options
 checkArgs Options {oOformat = Nothing} =  Nothing
 checkArgs Options {oInput = Nothing} =  Nothing
-checkArgs Options opts {oIformat = Nothing} = Just opts
-checkArgs Options opts {oIformat = Just iformat} =
-    if checkFormat iformat == Nothing
+checkArgs opts@(Options{oIformat = Nothing}) = Just opts
+checkArgs opts@(Options{oIformat = Just iformat}) = if checkFormat iformat == Nothing
     then Nothing
     else Just opts
 
