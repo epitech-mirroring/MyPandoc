@@ -19,7 +19,7 @@ createDoc filecont output = if output /= "stdout"
     else putStrLn filecont
 
 {-//TODO
-    get the string to
+    get the string to convert
 -}
 
 writeTheDoc :: IO ()
