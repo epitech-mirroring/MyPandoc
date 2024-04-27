@@ -53,7 +53,7 @@ fclean: clean
 log:
 	@cat /tmp/mypandocbuild.log
 
-test_run:
+tests_run:
 	@stack test --coverage
 	@printf "$(SUCCESS)$(GREEN) 🎉   Tests passed successfully$(RESET)\n";
 
