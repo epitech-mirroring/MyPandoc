@@ -6,22 +6,8 @@
 -}
 
 module Main (main) where
-import Data.Maybe (fromMaybe);
+import GHC.IO.Device (RawIO(write))
+import Core (writeTheDoc)
 
-import HandleArgs (
-        Options(..),
-        parseArgs,
-    )
 main :: IO ()
-main = do
-    opts <- parseArgs
-    case opts of
-        Options {oIformat = i, oOformat = o, oOutput = p, oInput = f} -> do
-            putStrLn "Hello World"
-            putStrLn $ fromMaybe "" i
-            putStrLn $ fromMaybe "" o
-            putStrLn $ fromMaybe "" p
-            putStrLn $ fromMaybe "" f
-            return ()
-        _ -> do
-          return ()
+main = writeTheDoc
