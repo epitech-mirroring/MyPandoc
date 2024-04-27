@@ -23,8 +23,10 @@ source-repository head
 
 library
   exposed-modules:
+      Core
       DataStruct
       HandleArgs
+      OpenFile
       ParserData
   other-modules:
       Paths_mypandoc
