@@ -118,6 +118,7 @@ formattedTextToJSON (Code element) indent = replicate (indent * 4) ' ' ++
     "{\n" ++ replicate ((indent + 1) * 4) ' '
     ++ "\"code\": " ++ contentToJSON element (indent + 1) False ++ "\n"
     ++ replicate (indent * 4) ' ' ++ "}"
+formattedTextToJSON _ _ = ""
 
 listToJSON :: Element -> Int -> String
 listToJSON (List elements) indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
