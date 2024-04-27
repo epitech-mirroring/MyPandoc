@@ -8,14 +8,20 @@ pipeline {
         BIN_NAME = 'mypandoc'
     }
     stages {
-        stage('🕵️ Lint') {
+        stage('🚀 Preparation') {
             steps {
-                // Clean before linting
+                // Clean before preparation
                 cleanWs()
 
                 // Clone the repository
                 checkout scm
 
+                // Prepare an image for 'epitest'
+
+            }
+        }
+        stage('🕵️ Lint') {
+            steps {
                 // Run docker container
                 sh 'docker run --rm --security-opt "label:disable" -v "$(pwd)":"/mnt/delivery" -v "$(pwd)":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"'
 
@@ -53,14 +59,13 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v ~/.stack:/.stack'
                 }
             }
             steps {
                 ansiColor('xterm') {
                     // Fix the permissions
-                    sh 'sudo chown -R $(id -un):$(id -gn) ~'
-                    sh 'sudo chown -R $(id -un):$(id -gn) .'
+                    sh 'TAR_OPTIONS=--no-same-owner stack setup'
 
                     // Run the build
                     sh 'make'
@@ -81,14 +86,13 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v ~/.stack:/.stack'
                 }
             }
             steps {
                 ansiColor('xterm') {
                     // Fix the permissions
-                    sh 'sudo chown -R $(id -un):$(id -gn) ~'
-                    sh 'sudo chown -R $(id -un):$(id -gn) .'
+                    sh 'TAR_OPTIONS=--no-same-owner stack setup --allow-different-user'
 
                     // Run the tests
                     sh 'make tests_run'
