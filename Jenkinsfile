@@ -59,7 +59,7 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v ~/.stack:/.stack'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack'
                 }
             }
             steps {
@@ -86,7 +86,7 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v ~/.stack:/.stack'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack'
                 }
             }
             steps {
