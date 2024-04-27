@@ -59,8 +59,8 @@ pipeline {
             steps {
                 ansiColor('xterm') {
                     // Fix the permissions
-                    sh 'chown -R $(id -un):$(id -gn) ~'
-                    sh 'chown -R $(id -un):$(id -gn) .'
+                    sh 'sudo chown -R $(id -un):$(id -gn) ~'
+                    sh 'sudo chown -R $(id -un):$(id -gn) .'
 
                     // Run the build
                     sh 'make'
@@ -87,8 +87,8 @@ pipeline {
             steps {
                 ansiColor('xterm') {
                     // Fix the permissions
-                    sh 'chown -R $(id -un):$(id -gn) ~'
-                    sh 'chown -R $(id -un):$(id -gn) .'
+                    sh 'sudo chown -R $(id -un):$(id -gn) ~'
+                    sh 'sudo chown -R $(id -un):$(id -gn) .'
 
                     // Run the tests
                     sh 'make tests_run'
