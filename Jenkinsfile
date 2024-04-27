@@ -15,9 +15,6 @@ pipeline {
 
                 // Clone the repository
                 checkout scm
-
-                // Prepare an image for 'epitest'
-
             }
         }
         stage('🕵️ Lint') {
