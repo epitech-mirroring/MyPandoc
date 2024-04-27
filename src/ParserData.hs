@@ -18,13 +18,21 @@ module ParserData (
         parseInt,
         parseTuple,
         parseTruple,
-        parseString
+        parseString,
+        parseEmpty,
+        parseEmptyString,
+        parseEmptyList,
+        parseWhiteSpace,
+        parseNotChar
     ) where
 
-import Data.Char
-import Control.Applicative (Alternative(..))
-import Control.Monad
+import DataStruct (
+        Element(..)
+    )
 
+import Data.Char (isDigit)
+import Control.Applicative (Alternative(..))
+import Control.Monad ()
 
 data Parser a = Parser {
     runParser :: String -> Maybe (a, String)
@@ -138,15 +146,44 @@ parseTuple p1 = Parser p
 
 parseTruple :: Parser (Int , Int , Int)
 parseTruple = do
-  parseChar '('
+  _ <- parseChar '('
   a <- parseInt
-  parseChar ','
+  _ <- parseChar ','
   b <- parseInt
-  parseChar ','
+  _ <- parseChar ','
   c <- parseInt
-  parseChar ')'
+  _ <- parseChar ')'
   return (a, b, c)
 
 parseString :: String -> Parser String
 parseString [] = pure []
 parseString (x:xs) = (:) <$> parseChar x <*> parseString xs
+
+parseEmpty :: Char -> Parser Element
+parseEmpty '*' = return Empty
+parseEmpty c = do
+    _ <- parseChar c
+    return Empty
+
+parseEmptyString :: Char -> Parser String
+parseEmptyString '*' = return ""
+parseEmptyString c = do
+    _ <- parseChar c
+    return ""
+
+parseEmptyList :: Char -> Parser [Element]
+parseEmptyList '*' = return []
+parseEmptyList c = do
+    _ <- parseChar c
+    return []
+
+parseWhiteSpace :: Parser String
+parseWhiteSpace = parseMany (parseAnyChar " \n\t")
+
+parseNotChar :: Char -> Parser Char
+parseNotChar c = Parser p
+    where
+        p "" = Nothing
+        p (x:xs)
+            | c /= x = Just (x, xs)
+            | otherwise = Nothing
