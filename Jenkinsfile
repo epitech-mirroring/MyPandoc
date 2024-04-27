@@ -94,14 +94,17 @@ pipeline {
                     // Fix the permissions
                     sh 'TAR_OPTIONS=--no-same-owner stack setup'
 
+                    // Update hpc-codecov
+                    sh 'stack install hpc-codecov-0.5.0.0'
+
                     // Run the tests
                     sh 'make tests_run'
 
+                    // Transform the tests results to JUnit format
+                    sh 'stack exec hpc-codecov -- testsuite --junit'
+
                     // Display the tests results in a graph using the JUnit plugin
                     junit(testResults: 'junit.xml', allowEmptyResults : true)
-
-                    // Update hpc-codecov
-                    sh 'stack install hpc-codecov-0.5.0.0'
 
                     // Run the coverage
                     sh '/.local/bin/hpc-codecov stack:all -f cobertura -o coverage.xml'
