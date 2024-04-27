@@ -6,6 +6,7 @@
 -}
 
 module Main (main) where
+import Core (writeTheDoc)
 
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = writeTheDoc

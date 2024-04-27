@@ -60,7 +60,7 @@ elementsToXML [] _ = ""
 elementsToXML (x:xs) n = elementToXML x n ++ elementsToXML xs n
 
 elementToXML :: Element -> Int -> String
-elementToXML (Text str) n = str
+elementToXML (Text str) _ = str
 elementToXML (Bold elem) n = "<bold>" ++ elementToXML elem (n + 1) ++ "</bold>"
 elementToXML (Italic elem) n = "<italic>" ++ elementToXML elem (n + 1)
     ++ "</italic>"
@@ -80,4 +80,4 @@ elementToXML (Section section) n = printIndented n ++ "<section title=\"" ++
     sectionTitle section ++ "\">" ++
     elementsToXML (sectionContent section) (n + 1) ++ printIndented n ++
     "</section>"
-elementToXML (Empty) n = ""
+elementToXML (Empty) _ = ""
