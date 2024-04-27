@@ -104,7 +104,7 @@ pipeline {
                     sh 'stack install hpc-codecov-0.5.0.0'
 
                     // Run the coverage
-                    sh 'hpc-codecov stack:all -f cobertura -o coverage.xml'
+                    sh '/.local/bin/hpc-codecov stack:all -f cobertura -o coverage.xml'
 
                     // Display coverage using the Coverage plugin
                     recordCoverage(tools: [[parser: 'COBERTURA']],
