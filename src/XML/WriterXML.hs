@@ -27,7 +27,7 @@ import DataStruct (
     )
 
 printIndented :: Int -> String
-printIndented n = "\n" ++ concat (replicate n "\t")
+printIndented n = "\n" ++ concat (replicate (n * 4) " ")
 
 documentToXML :: Document -> String
 documentToXML (Document header body) = "<document>" ++ headerToXML header ++
@@ -80,3 +80,4 @@ elementToXML (Section section) n = printIndented n ++ "<section title=\"" ++
     sectionTitle section ++ "\">" ++
     elementsToXML (sectionContent section) (n + 1) ++ printIndented n ++
     "</section>"
+elementToXML (Empty) n = ""
