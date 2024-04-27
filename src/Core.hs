@@ -22,16 +22,16 @@ import JSON.WriterJSON (documentToJSON)
 import Control.Exception (catch)
 
 createDoc :: String -> String -> IO ()
-createDoc filecont output = if output /= "stdout"
-        then writeFile output filecont `catch`
-            (`handleError` "Error: failed to write output file")
-        else putStrLn filecont
+createDoc filecont "stdout" = putStrLn filecont
+createDoc filecont output = writeFile output filecont `catch`
+    (`handleError` "Error: failed to write output file")
 
 getParserContent :: App -> Maybe Document
-getParserContent app = case oIformat (opt app) of
-    Just "json" -> parseJSON (content app)
-    Just "xml" -> getXMLDocument (content app)
-    _ -> Nothing
+getParserContent (App (Options (Just "json") _ _ _) content) =
+    parseJSON content
+getParserContent (App (Options (Just "xml") _ _ _) content) =
+    getXMLDocument content
+getParserContent _ = Nothing
 
 writeDocString :: App -> Maybe Document -> Maybe String
 writeDocString (App (Options _ (Just "xml") _ _) _)
@@ -44,13 +44,8 @@ writeDocString _ _ = Nothing
 
 writeTheDoc :: IO ()
 writeTheDoc = do
-    let app = getOption
-    app' <- app
-    let doc = getParserContent app'
-    let string = writeDocString app' doc
-    case string of
-        Just str -> createDoc str (fromMaybe "stdout" (oOutput (opt app')))
+    app <- getOption
+    case writeDocString app (getParserContent app) of
+        Just str -> createDoc str (fromMaybe "stdout" (oOutput (opt app)))
         Nothing -> handleError
             (userError "Error: invalid format") "Error: invalid format"
-
--- TODO case insisitve
