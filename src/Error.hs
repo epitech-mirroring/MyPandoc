@@ -10,7 +10,7 @@ module Error (
 ) where
 
 import System.Exit (exitWith, ExitCode(..))
-import Control.Exception
-
+import Control.Exception (IOException)
 handleError :: IOException -> String -> IO ()
+
 handleError _ message = putStrLn message >> exitWith (ExitFailure 84)
