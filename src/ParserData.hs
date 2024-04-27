@@ -30,7 +30,6 @@ import DataStruct (
         Element(..)
     )
 
-import Data.Char (isDigit)
 import Control.Applicative (Alternative(..))
 import Control.Monad ()
 
