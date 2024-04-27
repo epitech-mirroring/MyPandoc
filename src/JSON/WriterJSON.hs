@@ -40,18 +40,22 @@ headerToJSON h = "    \"header\": {\n"
     ++ (headerContentToJSON $ contents h) ++ "\n    }"
 
 headerContentToJSON :: [HeaderElement] -> String
-headerContentToJSON [x] = case x of
-    Title title -> replicate 8 ' ' ++ "\"title\": \"" ++ title ++ "\""
-    Author author -> replicate 8 ' ' ++ "\"author\": \"" ++ author ++ "\""
-    Date date -> replicate 8 ' ' ++ "\"date\": \"" ++ date ++ "\""
-headerContentToJSON (x:xs) = case x of
-    Title title -> replicate 8 ' ' ++ "\"title\": \"" ++ title ++ "\",\n"
-        ++ headerContentToJSON xs
-    Author author -> replicate 8 ' ' ++ "\"author\": \"" ++ author ++ "\",\n"
-        ++ headerContentToJSON xs
-    Date date -> replicate 8 ' ' ++ "\"date\": \"" ++ date ++ "\",\n"
-        ++ headerContentToJSON xs
-headerContentToJSON [] = ""
+headerContentToJSON [Title title] =
+    replicate 8 ' ' ++ "\"title\": \"" ++ title ++ "\""
+headerContentToJSON [Author author] =
+    replicate 8 ' ' ++ "\"author\": \"" ++ author ++ "\""
+headerContentToJSON [Date date] =
+    replicate 8 ' ' ++ "\"date\": \"" ++ date ++ "\""
+headerContentToJSON (Title title : xs) =
+    replicate 8 ' ' ++ "\"title\": \"" ++ title ++ "\",\n"
+    ++ headerContentToJSON xs
+headerContentToJSON (Author author : xs) =
+    replicate 8 ' ' ++ "\"author\": \"" ++ author ++ "\",\n"
+    ++ headerContentToJSON xs
+headerContentToJSON (Date date : xs) =
+    replicate 8 ' ' ++ "\"date\": \"" ++ date ++ "\",\n"
+    ++ headerContentToJSON xs
+headerContentToJSON _ = ""
 
 bodyToJSON :: Body -> String
 bodyToJSON b = replicate 4 ' ' ++ "\"body\": [\n" ++
@@ -124,15 +128,24 @@ formattedTextToJSON (Code element) indent = replicate (indent * 4) ' ' ++
 --     ++ replicate (indent * 4) ' ' ++ "}"
 
 listToJSON :: Element -> Int -> String
-listToJSON element indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
-    ++ "\"" ++ (case element of
-        List _ -> "list"
-        CodeBlock _ -> "codeblock"
-        _ -> "") ++ "\": [\n" ++ listContentToJSON (case element of
-        List elements -> elements
-        CodeBlock elements -> elements
-        _ -> []) (indent + 1) ++ replicate (indent * 4) ' ' ++ "]\n"
+listToJSON (List elements) indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
+    ++ "\"list\": [\n" ++ listContentToJSON elements (indent + 1)
+    ++ replicate ((indent + 1) * 4) ' ' ++ "]\n"
     ++ replicate (indent * 4) ' ' ++ "}"
+listToJSON (CodeBlock elements) indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
+    ++ "\"codeblock\": [\n" ++ listContentToJSON elements (indent + 1)
+    ++ replicate ((indent + 1) * 4) ' ' ++ "]\n"
+    ++ replicate (indent * 4) ' ' ++ "}"
+listToJSON _ _ = ""
+-- listToJSON element indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
+--     ++ "\"" ++ (case element of
+--         List _ -> "list"
+--         CodeBlock _ -> "codeblock"
+--         _ -> "") ++ "\": [\n" ++ listContentToJSON (case element of
+--         List elements -> elements
+--         CodeBlock elements -> elements
+--         _ -> []) (indent + 1) ++ replicate (indent * 4) ' ' ++ "]\n"
+--     ++ replicate (indent * 4) ' ' ++ "}"
 
 linksToJSON :: LinkType -> Int -> String
 linksToJSON link indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
