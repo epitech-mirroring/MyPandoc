@@ -8,14 +8,17 @@ pipeline {
         BIN_NAME = 'mypandoc'
     }
     stages {
-        stage('🕵️ Lint') {
+        stage('🚀 Preparation') {
             steps {
-                // Clean before linting
+                // Clean before preparation
                 cleanWs()
 
                 // Clone the repository
                 checkout scm
-
+            }
+        }
+        stage('🕵️ Lint') {
+            steps {
                 // Run docker container
                 sh 'docker run --rm --security-opt "label:disable" -v "$(pwd)":"/mnt/delivery" -v "$(pwd)":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"'
 
@@ -28,7 +31,7 @@ pipeline {
                         def line = error.split(':')[1]
                         def type = error.split(':')[2]
                         def code = error.split(':')[3]
-                        echo "File: ${file}, Line: ${line}, Type: ${type}, Code: ${code}"
+                        unstable "File: ${file}, Line: ${line}, Type: ${type}, Code: ${code}"
                     }
                     // Archive the report
                     archiveArtifacts 'coding-style-reports.log'
@@ -53,16 +56,14 @@ pipeline {
             agent {
                 docker {
                     image 'epitechcontent/epitest-docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
-            when {
-                expression {
-                    return false
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack -v /var/lib/jenkins/.local:/.local'
                 }
             }
             steps {
                 ansiColor('xterm') {
+                    // Fix the permissions
+                    sh 'TAR_OPTIONS=--no-same-owner stack setup'
+
                     // Run the build
                     sh 'make'
 
@@ -79,24 +80,28 @@ pipeline {
             }
         }
         stage ('🧪 Tests') {
-            when {
-                expression {
-                    return false
+            agent {
+                docker {
+                    image 'epitechcontent/epitest-docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.stack:/.stack -v /var/lib/jenkins/.local:/.local'
                 }
             }
             steps {
                 ansiColor('xterm') {
+                    // Fix the permissions
+                    sh 'TAR_OPTIONS=--no-same-owner stack setup'
+
+                    // Update hpc-codecov
+                    sh 'stack install hpc-codecov-0.5.0.0'
+
                     // Run the tests
                     sh 'make tests_run'
 
                     // Display the tests results in a graph using the JUnit plugin
                     junit(testResults: 'junit.xml', allowEmptyResults : true)
 
-                    // Update hpc-codecov
-                    sh 'stack install hpc-codecov-0.5.0.0'
-
                     // Run the coverage
-                    sh 'hpc-codecov stack:all -f cobertura -o coverage.xml'
+                    sh '/.local/bin/hpc-codecov stack:all -f cobertura -o coverage.xml'
 
                     // Display coverage using the Coverage plugin
                     recordCoverage(tools: [[parser: 'COBERTURA']],

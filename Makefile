@@ -49,12 +49,13 @@ fclean: clean
 	@rm -fr $(NAME)
 	@printf "$(RUNNING)$(RED) 🗑️   Fcleaning mypandoc$(RESET)\n";
 
-
 log:
 	@cat /tmp/mypandocbuild.log
 
 tests_run:
 	@stack test --coverage
 	@printf "$(SUCCESS)$(GREEN) 🎉   Tests passed successfully$(RESET)\n";
+	@stack hpc report --all --destdir=test/coverage
+	@printf "$(RUNNING)$(BLUE) 📊  Generating coverage report$(RESET)\n";
 
 re: fclean all

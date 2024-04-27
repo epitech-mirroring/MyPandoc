@@ -76,6 +76,7 @@ parseXMLList = do
     _ <- parseXMLFlag "list"
     elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/list"
+    _ <- parseWhiteSpace
     return (List (filterWhiteSpace elems))
 
 parseXMLParagraph :: Parser Element
@@ -84,6 +85,7 @@ parseXMLParagraph = do
     _ <- parseXMLFlag "paragraph"
     elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/paragraph"
+    _ <- parseWhiteSpace
     return (Paragraph elems)
 
 parseXMLCodeBlock :: Parser Element
@@ -92,6 +94,7 @@ parseXMLCodeBlock = do
     _ <- parseXMLFlag "codeblock"
     elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/codeblock"
+    _ <- parseWhiteSpace
     return (CodeBlock (filterWhiteSpace elems))
 
 parseXMLLink :: Parser Element
@@ -100,6 +103,7 @@ parseXMLLink = do
     (_, urlContent) <- parseXMLFlagWithAttr "link" "url"
     elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/link"
+    _ <- parseWhiteSpace
     return (Link (LinkType urlContent elems))
 
 parseXMLImage :: Parser Element
@@ -108,6 +112,7 @@ parseXMLImage = do
     (_, urlContent) <- parseXMLFlagWithAttr "image" "url"
     altContent <- parseMany parseXMLElement
     _ <- parseXMLFlag "/image"
+    _ <- parseWhiteSpace
     return (Image (ImageType urlContent altContent))
 
 parseXMLSection :: Parser Element
@@ -116,6 +121,7 @@ parseXMLSection = do
     (_, title) <- parseXMLFlagWithAttr "section" "title"
     elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/section"
+    _ <- parseWhiteSpace
     return (Section (SectionType title (filterWhiteSpace elems)))
 
 parseXMLElement :: Parser Element
