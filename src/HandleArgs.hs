@@ -20,7 +20,6 @@ import System.Console.GetOpt
 import System.Environment (getArgs)
 import System.Exit (exitWith, ExitCode(..))
 import System.IO (hPutStrLn, stderr)
-import Data.Maybe (isJust)
 
 data Options = Options {
         oIformat :: Maybe String,
@@ -53,9 +52,9 @@ options = [
     Option ['i'] [""] (ReqArg (\i opts -> opts {oInput = Just i}) "ifile")
         "path to the file to convert",
     Option ['o'] [""] (ReqArg (\o opts -> opts {oOutput = Just o}) "ofile")
-        "output format (xml, json, markdown)",
-    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat = Just f}) "oformat")
         "path to the output file",
+    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat = Just f}) "oformat")
+        "output format (xml, json, markdown)",
     Option ['e'] [""] (ReqArg (\e opts -> opts {oIformat = Just e}) "iformat")
         "input format (xml, json, markdown)"
     ]
@@ -63,21 +62,17 @@ options = [
 getHelp :: String
 getHelp =
     usageInfo "USAGE: ./mypandoc\
-    \-i ifile -f oformat [-o ofile] [-e iformat]" options
+        \ -i ifile -f oformat [-o ofile] [-e iformat]" options
+
+checkFormat :: String -> Maybe String
+checkFormat format = if format `elem` ["xml", "json", "markdown"]
+    then Just format
+    else Nothing
 
 checkArgs :: Options -> Maybe Options
-checkArgs Options {oOformat = Nothing} = Nothing
-checkArgs Options {oInput = Nothing} = Nothing
-checkArgs opts = Just (opts{
-    oOutput = if isJust (oOutput opts) then oOutput opts
-        else Nothing,
-    oIformat = if isJust (oIformat opts) then oIformat opts
-        else Nothing,
-    oOformat = if isJust (oOformat opts) then oOformat opts
-        else Nothing,
-    oInput = if isJust (oInput opts) then oInput opts
-        else Nothing
-})
+checkArgs Options {oOformat = Nothing} =  Nothing
+checkArgs Options {oInput = Nothing} =  Nothing
+checkArgs opts = Just opts
 
 parseOptions :: [String] -> IO Options
 parseOptions args = case getOpt Permute options args of
