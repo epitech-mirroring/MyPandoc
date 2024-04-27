@@ -73,3 +73,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+*.lockb
+*.lock
+node_modules

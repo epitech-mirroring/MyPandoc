@@ -23,11 +23,16 @@ source-repository head
 
 library
   exposed-modules:
+      Core
       DataStruct
+      Error
+      HandleArgs
       JSON.ParserJSON
       JSON.ParserJSONElements
       JSON.ParserJSONHeader
       JSON.WriterJSON
+      Markdown.WriterMarkdown
+      OpenFile
       ParserData
       XML.ParserXML
       XML.ParserXMLElements
