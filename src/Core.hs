@@ -23,7 +23,8 @@ import Control.Exception (catch)
 
 createDoc :: String -> String -> IO ()
 createDoc filecont output = if output /= "stdout"
-        then writeFile output filecont `catch` (`handleError` "Error: failed to write output file")
+        then writeFile output filecont `catch`
+            (`handleError` "Error: failed to write output file")
         else putStrLn filecont
 
 getParserContent :: App -> Maybe Document
@@ -33,9 +34,12 @@ getParserContent app = case oIformat (opt app) of
     _ -> Nothing
 
 writeDocString :: App -> Maybe Document -> Maybe String
-writeDocString (App (Options _ (Just "xml") _ _) _) (Just doc) = Just (documentToXML doc)
-writeDocString (App (Options _ (Just "json") _ _) _) (Just doc) = Just (documentToJSON doc)
-writeDocString (App (Options _ (Just "markdown") _ _) _) (Just doc) = Just (writeMarkdownDocument doc)
+writeDocString (App (Options _ (Just "xml") _ _) _)
+    (Just doc) = Just (documentToXML doc)
+writeDocString (App (Options _ (Just "json") _ _) _)
+    (Just doc) = Just (documentToJSON doc)
+writeDocString (App (Options _ (Just "markdown") _ _) _)
+    (Just doc) = Just (writeMarkdownDocument doc)
 writeDocString _ _ = Nothing
 
 writeTheDoc :: IO ()

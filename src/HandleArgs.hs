@@ -20,6 +20,7 @@ import System.Console.GetOpt (OptDescr(..), ArgDescr(..), ArgOrder(..), getOpt, 
 import System.Environment (getArgs)
 import System.Exit (exitWith, ExitCode(..))
 import System.IO (hPutStrLn, stderr)
+import Data.Maybe (isNothing)
 
 data Options = Options {
         oIformat :: Maybe String,
@@ -53,8 +54,8 @@ options = [
         "path to the file to convert",
     Option ['o'] [""] (ReqArg (\o opts -> opts {oOutput = Just o}) "ofile")
         "path to the output file",
-    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat = checkFormat f}) "oformat")
-        "output format (xml, json, markdown)",
+    Option ['f'] [""] (ReqArg (\f opts -> opts {oOformat =
+        checkFormat f}) "oformat") "output format (xml, json, markdown)",
     Option ['e'] [""] (ReqArg (\e opts -> opts {oIformat = Just e}) "iformat")
         "input format (xml, json, markdown)"
     ]
@@ -73,7 +74,8 @@ checkArgs :: Options -> Maybe Options
 checkArgs Options {oOformat = Nothing} =  Nothing
 checkArgs Options {oInput = Nothing} =  Nothing
 checkArgs opts@(Options{oIformat = Nothing}) = Just opts
-checkArgs opts@(Options{oIformat = Just iformat}) = if checkFormat iformat == Nothing
+checkArgs opts@(Options{oIformat = Just iformat}) =
+    if isNothing (checkFormat iformat)
     then Nothing
     else Just opts
 
