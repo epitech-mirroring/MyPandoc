@@ -6,8 +6,7 @@
 -}
 
 module OpenFile (
-        getOption,
-        printOptions
+        getOption
     ) where
 
 import System.IO (hPutStrLn, stderr)
@@ -19,6 +18,8 @@ import HandleArgs (
 import Data.Maybe
 import GHC.IO.Exception
 import System.Exit
+import Control.Exception
+import Error (handleError)
 
 openFile :: IO App
 openFile = do
@@ -29,8 +30,11 @@ openFile = do
     if input == ""
         then hPutStrLn stderr "Error: no input file" >> putStrLn input >>
             exitWith (ExitFailure 84)
-        else readFile input >>=
-            \file -> return App { opt = options, content = file }
+        else do
+            file <- readFile input
+            return App { opt = options, content = file }
+        `catch` (\e -> handleError e "Error: failed to read input file" >>
+            return App { opt = options, content = "" })
 
 getFormat :: String -> String
 getFormat input
