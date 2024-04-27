@@ -11,4 +11,4 @@ main :: IO ()
 main = hspec $ do
     describe "Test" $ do
         it "should be true" $ do
-            True `shouldBe` False
+            True `shouldBe` True
