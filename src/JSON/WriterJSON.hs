@@ -124,7 +124,8 @@ listToJSON (List elements) indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
     ++ "\"list\": [\n" ++ listContentToJSON elements (indent + 1)
     ++ replicate ((indent + 1) * 4) ' ' ++ "]\n"
     ++ replicate (indent * 4) ' ' ++ "}"
-listToJSON (CodeBlock elements) indent = "{\n" ++ replicate ((indent + 1) * 4) ' '
+listToJSON (CodeBlock elements) indent = "{\n"
+    ++ replicate ((indent + 1) * 4) ' '
     ++ "\"codeblock\": [\n" ++ listContentToJSON elements (indent + 1)
     ++ replicate ((indent + 1) * 4) ' ' ++ "]\n"
     ++ replicate (indent * 4) ' ' ++ "}"
