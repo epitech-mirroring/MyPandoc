@@ -1,0 +1,231 @@
+name = "MyPandoc health checks"
+
+always_stop_after_failure = false
+
+[defaults]
+command.expected.exit_code = 0
+
+# Repository structure
+
+[[test]]
+name = "Makefile at the root of the repository"
+type = "path_exists"
+path = "Makefile"
+target_type = "file"
+
+[[test]]
+name = "README exists"
+type = "path_exists"
+path = "README.md"
+target_type = "file"
+
+[[test]]
+name = "Source directory exists"
+type = "path_exists"
+path = "src"
+target_type = "directory"
+
+[[test]]
+name = "App directory exists"
+type = "path_exists"
+path = "app"
+target_type = "directory"
+
+[[test]]
+name = "Bonus directory exists"
+type = "path_exists"
+path = "bonus"
+target_type = "directory"
+
+[[test]]
+name = "Tests directory exists"
+type = "path_exists"
+path = "test"
+target_type = "directory"
+
+
+# Compilation
+
+[[test]]
+name = "Root Makefile fclean"
+type = "command"
+command = "make fclean"
+
+[[test]]
+name = "Root Makefile compilation"
+type = "command"
+command = "make"
+
+[[test]]
+name = "MyPandoc executable correct name"
+type = "path_exists"
+path = "mypandoc"
+target_type = "file"
+
+[[test]]
+name = "MyPandoc binary generated after root Makefile compilation"
+type = "path_exists"
+path = "mypandoc"
+target_type = "file"
+
+[[test]]
+name = "Root Makefile clean rule"
+type = "command"
+command = "make clean"
+
+[[test]]
+name = "Root Makefile fclean rule"
+type = "command"
+command = "make fclean"
+
+
+# PROJECT TESTING
+
+# Tests Error Handling
+
+[[test]]
+name = "Root Makefile re rule"
+type = "command"
+command = "make re"
+
+[[test]]
+name = "MyPandoc with no arguments"
+type = "command"
+command = "./mypandoc"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with only -i argument"
+type = "command"
+command = "./mypandoc -i test.md"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with only -f argument"
+type = "command"
+command = "./mypandoc -f markdown"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with only -o argument"
+type = "command"
+command = "./mypandoc -o test.xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with only -e argument"
+type = "command"
+command = "./mypandoc -e xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with no -i argument"
+type = "command"
+command = "./mypandoc -f markdown -o test.xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with no -f argument"
+type = "command"
+command = "./mypandoc -i test.md -o test.xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with invalid -f argument"
+type = "command"
+command = "./mypandoc -i test.md -f invalid -o test.xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with invalid json input file"
+type = "command"
+command = "./mypandoc -i test/TestsFiles/invalidJSONFile.json -f markdown"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with invalid xml input file"
+type = "command"
+command = "./mypandoc -i test/TestsFiles/invalidXMLFile.xml -f markdown"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with invalid markdown input file"
+type = "command"
+command = "./mypandoc -i test/TestsFiles/invalidMarkdownFile.md -f markdown"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc with invalid -e argument"
+type = "command"
+command = "./mypandoc -i test.md -f markdown -e invalid -o test.xml"
+expected.exit_code = 84
+
+[[test]]
+name = "MyPandoc display when error with arguments"
+type = "command"
+command = "./mypandoc"
+expected.exit_code = 84
+expected.stderr = "USAGE: ./mypandoc -i ifile -f oformat [-o ofile] [-e iformat]\n  -i ifile    --ifile=ifile      path to the file to convert\n  -o ofile    --ofile=ofile      path to the output file\n  -f oformat  --oformat=oformat  output format (xml, json, markdown)\n  -e iformat  --iformat=iformat  input format (xml, json, markdown)\n\n"
+
+# Tests MyPandoc
+
+[[test]]
+name = "MyPandoc with valid json input file to xml"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.json -f xml"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid json input file to markdown"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.json -f markdown"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid json input file to json"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.json -f json"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid xml input file to xml"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.xml -f xml"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid xml input file to markdown"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.xml -f markdown"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid xml input file to json"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.xml -f json"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid markdown input file to xml"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.md -f xml"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid markdown input file to markdown"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.md -f markdown"
+expected.exit_code = 0
+
+[[test]]
+name = "MyPandoc with valid markdown input file to json"
+type = "command"
+command = "./mypandoc -i examples/syntaxe.md -f json"
+expected.exit_code = 0
+
+# Clean up
+
+[[test]]
+name = "Root Makefile fclean"
+type = "command"
+command = "make fclean"
