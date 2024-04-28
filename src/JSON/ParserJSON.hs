@@ -13,9 +13,10 @@ module JSON.ParserJSON (
     ) where
 
 import DataStruct (Document(..), Body(..))
-import ParserData (Parser(..), parseChar, parseString)
+import ParserData (Parser(..), parseChar, parseString, parseEmptyList)
 import JSON.ParserJSONHeader (parseJSONHeader)
 import JSON.ParserJSONElements (parseJSONElements)
+import Control.Applicative ((<|>))
 
 unbeautifyJSON :: String -> Bool -> String
 unbeautifyJSON [] _ = []
@@ -31,7 +32,7 @@ parseJSONBody :: Parser Body
 parseJSONBody = do
     _ <- parseString "\"body\":"
     _ <- parseChar '['
-    elements <- parseJSONElements ']'
+    elements <- parseJSONElements ']' <|> parseEmptyList ']'
     return (Body elements)
 
 parseJSONDocument :: Parser Document
