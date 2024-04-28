@@ -68,6 +68,10 @@ test-suite mypandoc-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      XMLSpec.ParserXMLElementsSpec
+      XMLSpec.ParserXMLHeaderSpec
+      XMLSpec.ParserXMLSpec
+      XMLSpec.ParserXMLUtilsSpec
       Paths_mypandoc
   autogen-modules:
       Paths_mypandoc
