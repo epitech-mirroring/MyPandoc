@@ -19,18 +19,18 @@ module DataStruct (
 data Document = Document {
     header :: Header,
     body :: Body
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 data Header = Header {
     contents :: [HeaderElement]
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 data HeaderElement = Title String | Author String | Date String
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Body = Body {
     content :: [Element]
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 data Element = Text String
     | Bold Element
