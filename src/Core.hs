@@ -37,12 +37,14 @@ getParserContent (App (Options (Just "xml") _ _ _) contentf) =
 getParserContent _ = Nothing
 
 writeDocString :: App -> Maybe Document -> Maybe String
-writeDocString (App (Options _ (Just "xml") _ _) _)
-    (Just doc) = Just (documentToXML doc)
-writeDocString (App (Options _ (Just "json") _ _) _)
-    (Just doc) = Just (documentToJSON doc)
-writeDocString (App (Options _ (Just "markdown") _ _) _)
-    (Just doc) = Just (writeMarkdownDocument doc)
+writeDocString (App (Options (Just "markdown") (Just "markdown") _ _)
+    contentMD) _ = Just contentMD
+writeDocString (App (Options _ (Just "xml") _ _) _) (Just doc) =
+        Just (documentToXML doc)
+writeDocString (App (Options _ (Just "json") _ _) _) (Just doc) =
+    Just (documentToJSON doc)
+writeDocString (App (Options _ (Just "markdown") _ _) _) (Just doc) =
+    Just (writeMarkdownDocument doc)
 writeDocString (App (Options (Just "markdown") (Just _) _ _) _) _ = Just ""
 writeDocString _ _ = Nothing
 
