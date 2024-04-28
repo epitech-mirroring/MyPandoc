@@ -49,7 +49,6 @@ writeDocString _ _ = Nothing
 writeTheDoc :: IO ()
 writeTheDoc = do
     app <- getOption
-    print (getParserContent app)
     case writeDocString app (getParserContent app) of
         Just str -> createDoc str (fromMaybe "stdout" (oOutput (opt app)))
         Nothing -> handleError
