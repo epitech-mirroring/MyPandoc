@@ -55,7 +55,7 @@ headerElementsToXML ((Date date):xs) = printIndented 2 ++ "<date>" ++ date ++
 
 bodyToXML :: Body -> String
 bodyToXML (Body content) = printIndented 1 ++ "<body>" ++
-    elementsToXML content 2 ++ "</body>" ++ printIndented 0
+    elementsToXML content 2 ++ printIndented 1 ++ "</body>" ++ printIndented 0
 
 elementsToXML :: [Element] -> Int -> String
 elementsToXML [] _ = ""
