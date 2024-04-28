@@ -16,19 +16,18 @@ import ParserData (
         runParser,
         parseWhiteSpace,
         parseMany,
-        parseEmptyList
+
     )
 
 import XML.ParserXMLUtils (parseXMLFlag)
 import XML.ParserXMLElements (parseXMLElement)
 import XML.ParserXMLHeader (parseXMLHeader)
 import DataStruct (Document(..), Body(..))
-import Control.Applicative ((<|>))
 
 parseXMLBody :: Parser Body
 parseXMLBody = do
     _ <- parseXMLFlag "body"
-    elems <- (parseMany parseXMLElement) <|> parseEmptyList '*'
+    elems <- parseMany parseXMLElement
     _ <- parseXMLFlag "/body"
     return (Body elems)
 
