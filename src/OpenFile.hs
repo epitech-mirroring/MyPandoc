@@ -7,22 +7,24 @@
 
 module OpenFile (
         getOption,
-        wichFormat,
         openFile,
+        wichFormat,
         getFormat,
         getOutput
     ) where
 
 import System.IO (hPutStrLn, stderr)
+import System.Exit (exitWith, ExitCode(..))
+import Control.Exception (catch)
+import Error (handleError)
 import HandleArgs (
         Options(..),
         App(..),
         parseArgs,
     )
-
-import System.Exit (exitWith, ExitCode(..))
-import Control.Exception (catch)
-import Error (handleError)
+import JSON.ParserJSON (parseJSON)
+import XML.ParserXML (getXMLDocument)
+import Data.Maybe (isJust)
 
 openFile :: IO App
 openFile = do
@@ -36,11 +38,12 @@ openFile = do
         `catch` (\e -> handleError e "Error: failed to read input file" >>
             exitWith (ExitFailure 84))
 
+
 wichFormat :: String -> String
-wichFormat ('<' : _) = "xml"
-wichFormat ('{' : _) = "json"
-wichFormat ('-' : _) = "markdown"
-wichFormat _ = "unknown"
+wichFormat contentfile | isJust (getXMLDocument contentfile) = "xml"
+wichFormat contentfile | isJust (parseJSON contentfile) = "json"
+wichFormat contentfile | take 3 contentfile == "---" = "markdown"
+wichFormat _ = ""
 
 getFormat :: Maybe String -> String -> String
 getFormat Nothing fileContent = wichFormat fileContent
