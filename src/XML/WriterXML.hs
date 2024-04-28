@@ -27,9 +27,9 @@ import DataStruct (
     )
 
 printIndented :: Int -> String
-printIndented n =
-    n < 0 = ""
-    otherwise = "\n" ++ replicate (n * 4) ' '
+printIndented n
+    | n < 0 = ""
+    | otherwise = "\n" ++ replicate (n * 4) ' '
 
 documentToXML :: Document -> String
 documentToXML (Document header body) = "<document>" ++ headerToXML header ++
