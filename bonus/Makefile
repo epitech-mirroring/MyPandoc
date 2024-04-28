@@ -6,12 +6,11 @@
 ##
 
 ## Config
-NAME 			= 	mypandoc
+NAME 			= 	mypandoc_bonus
 
-BONUS_NAME 		=  	mypandoc_bonus
-
+STACK_NAME		= 	mypandoc
 STACK_PATH		= 	$(shell stack path --local-install-root)
-STACK_BIN		= 	$(STACK_PATH)/bin/${NAME}-exe
+STACK_BIN		= 	$(STACK_PATH)/bin/${STACK_NAME}-exe
 
 # Colors and formatting
 GREEN =		\033[1;32m
@@ -61,14 +60,3 @@ tests_run:
 	@printf "$(RUNNING)$(BLUE) 📊  Generating coverage report$(RESET)\n";
 
 re: fclean all
-
-easteregg:
-	@make -C bonus
-	@cp bonus/$(BONUS_NAME) $(BONUS_NAME)
-	@printf "$(RUNNING)$(GOLD) 🐣  \
-	Easter egg: $(RESET)$(YELLOW)🐇$(RESET)\n";
-
-ftest_run:
-	@ftest
-	@printf "$(SUCCESS)$(GREEN) 🎉   \
-	Functional tests passed successfully$(RESET)\n";
