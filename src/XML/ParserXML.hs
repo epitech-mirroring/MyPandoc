@@ -15,8 +15,7 @@ import ParserData (
         Parser(..),
         runParser,
         parseWhiteSpace,
-        parseMany,
-
+        parseMany
     )
 
 import XML.ParserXMLUtils (parseXMLFlag)
