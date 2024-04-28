@@ -27,7 +27,9 @@ import DataStruct (
     )
 
 printIndented :: Int -> String
-printIndented n = "\n" ++ concat (replicate (n * 4) " ")
+printIndented n
+    | n < 0 = ""
+    | otherwise = "\n" ++ replicate (n * 4) ' '
 
 documentToXML :: Document -> String
 documentToXML (Document header body) = "<document>" ++ headerToXML header ++
@@ -60,22 +62,23 @@ elementsToXML [] _ = ""
 elementsToXML (x:xs) n = elementToXML x n ++ elementsToXML xs n
 
 elementToXML :: Element -> Int -> String
+elementToXML e (-1) = elementToXML e (-2)
 elementToXML (Text str) _ = str
-elementToXML (Bold elem) n = "<bold>" ++ elementToXML elem (n + 1) ++ "</bold>"
-elementToXML (Italic elem) n = "<italic>" ++ elementToXML elem (n + 1)
+elementToXML (Bold elem) _ = "<bold>" ++ elementToXML elem (-1) ++ "</bold>"
+elementToXML (Italic elem) _ = "<italic>" ++ elementToXML elem (-1)
     ++ "</italic>"
-elementToXML (Code elem) n = "<code>" ++ elementToXML elem (n + 1) ++ "</code>"
+elementToXML (Code elem) _ = "<code>" ++ elementToXML elem (-1) ++ "</code>"
 elementToXML (List elems) n = printIndented n ++ "<list>" ++
     elementsToXML elems (n + 1) ++ printIndented n ++ "</list>"
 elementToXML (Paragraph elems) n = printIndented n ++ "<paragraph>" ++
-    elementsToXML elems (n + 1) ++ "</paragraph>"
+    elementsToXML elems (-1) ++ "</paragraph>"
 elementToXML (CodeBlock elems) n = printIndented n ++ "<codeblock>" ++
-    elementsToXML elems (n + 1) ++ printIndented n ++ "</codeblock>"
-elementToXML (Link link) n = "<link url=\"" ++
-    linkUrl link ++ "\">" ++ elementsToXML (linkContent link) (n + 1) ++
+    elementsToXML elems (-1) ++ "</codeblock>"
+elementToXML (Link link) _ = "<link url=\"" ++
+    linkUrl link ++ "\">" ++ elementsToXML (linkContent link) (-1) ++
     "</link>"
-elementToXML (Image img) n = "<image url=\"" ++
-    imgUrl img ++ "\">" ++ elementsToXML (imgAlt img) (n + 1) ++ "</image>"
+elementToXML (Image img) _ = "<image url=\"" ++
+    imgUrl img ++ "\">" ++ elementsToXML (imgAlt img) (-1) ++ "</image>"
 elementToXML (Section section) n = printIndented n ++ "<section title=\"" ++
     sectionTitle section ++ "\">" ++
     elementsToXML (sectionContent section) (n + 1) ++ printIndented n ++
