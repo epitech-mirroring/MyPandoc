@@ -65,8 +65,10 @@ re: fclean all
 easteregg:
 	@make -C bonus
 	@cp bonus/$(BONUS_NAME) $(BONUS_NAME)
-	@printf "$(RUNNING)$(GOLD) 🐣  Easter egg: $(RESET)$(YELLOW)🐇$(RESET)\n";
+	@printf "$(RUNNING)$(GOLD) 🐣  \
+	Easter egg: $(RESET)$(YELLOW)🐇$(RESET)\n";
 
 ftest_run:
 	@ftest
-	@printf "$(SUCCESS)$(GREEN) 🎉   Functional tests passed successfully$(RESET)\n";
+	@printf "$(SUCCESS)$(GREEN) 🎉   \
+	Functional tests passed successfully$(RESET)\n";
