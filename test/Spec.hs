@@ -6,6 +6,8 @@
 -}
 
 import Test.Hspec
+import HandleArgsSpecs (handleArgsSpecs)
+import OpenFileSpecs (openFilesSpecs)
 import XMLSpec.ParserXMLSpec (parserXMLSpec)
 import XMLSpec.ParserXMLUtilsSpec (parserXMLUtilsSpec)
 import XMLSpec.ParserXMLElementsSpec (parserXMLElementsSpec)
@@ -23,5 +25,9 @@ main = hspec $ do
         parserXMLElementsSpec
     describe "ParserXMLHeaderSpec" $ do
         parserXMLHeaderSpec
+    describe "ArgumentHandlerSpec" $ do
+        handleArgsSpecs
+    describe "OpenFileSpec" $ do 
+        openFilesSpecs
     dataStructSpecs
     parserDataSpecs
