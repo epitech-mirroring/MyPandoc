@@ -6,9 +6,10 @@
 -}
 
 import Test.Hspec
+import HandleArgsSpecs (handleArgsSpecs)
+import OpenFileSpecs (openFilesSpecs)
 
 main :: IO ()
 main = hspec $ do
-    describe "Test" $ do
-        it "should be true" $ do
-            True `shouldBe` True
+    handleArgsSpecs
+    openFilesSpecs
