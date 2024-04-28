@@ -6,16 +6,15 @@
 -}
 
 import Test.Hspec
-import XMLSpec.ParserXMLSpec
-import XMLSpec.ParserXMLUtilsSpec
-import XMLSpec.ParserXMLElementsSpec
-import XMLSpec.ParserXMLHeaderSpec
+import XMLSpec.ParserXMLSpec (parserXMLSpec)
+import XMLSpec.ParserXMLUtilsSpec (parserXMLUtilsSpec)
+import XMLSpec.ParserXMLElementsSpec (parserXMLElementsSpec)
+import XMLSpec.ParserXMLHeaderSpec (parserXMLHeaderSpec)
+import DataStructSpecs (dataStructSpecs)
+import ParserDataSpecs (parserDataSpecs)
 
 main :: IO ()
 main = hspec $ do
-    describe "Test" $ do
-        it "should be true" $ do
-            True `shouldBe` True
     describe "ParserXMLSpec" $ do
         parserXMLSpec
     describe "ParserXMLUtilsSpec" $ do
@@ -24,4 +23,5 @@ main = hspec $ do
         parserXMLElementsSpec
     describe "ParserXMLHeaderSpec" $ do
         parserXMLHeaderSpec
-        
+    dataStructSpecs
+    parserDataSpecs
